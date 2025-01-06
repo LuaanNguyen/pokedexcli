@@ -7,6 +7,12 @@ import (
 	"strings"
 )
 
+type cliCommand struct {
+	name        string
+	description string
+	callback    func() error
+}
+
 
 func startRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
@@ -29,7 +35,20 @@ func startRepl() {
 		
 		//Capture the first "word" of the input and use it to print
 		firstWord := stringSlice[0]
-		fmt.Printf("Your command was: %s\n", firstWord)
+
+		command, exists := getCommands()[firstWord]
+		if exists {
+			err := command.callback()
+			if err != nil {
+				fmt.Println(err)
+			}
+			continue
+		} else {
+			fmt.Println("Unknown command")
+			continue
+		}
+
+		//fmt.Printf("Your command was: %s\n", firstWord)
 	}
 }
 
@@ -41,4 +60,20 @@ func cleanInput(text string) []string {
 
 	//Trim all white splace and split the input into words
 	return strings.Fields(loweredText)
+}
+
+
+func getCommands() map[string]cliCommand {
+	return map[string]cliCommand{
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    commandHelp,
+		},
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
+		},
+	}
 }
