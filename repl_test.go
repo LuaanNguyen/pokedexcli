@@ -18,7 +18,7 @@ func TestCleanInput(t *testing.T) {
 		},
 		{
 			input: "Golang",
-			expected: []string{"Golang"},
+			expected: []string{"golang"},
 		},
 	}
 
