@@ -15,7 +15,7 @@ type LocationResponse struct {
 }
 
 
-func commandMap() error {
+func commandMap(cfg *config) error {
 	res, err := http.Get("https://pokeapi.co/api/v2/location/")
 	if err != nil {
 		return fmt.Errorf("error fetching Pokedex locations: %w", err)
