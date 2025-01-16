@@ -16,7 +16,12 @@ type LocationResponse struct {
 
 
 func commandMap(cfg *config) error {
-	res, err := http.Get("https://pokeapi.co/api/v2/location/")
+	url := cfg.Next 
+	if url == "" {
+		url = "https://pokeapi.co/api/v2/location-area/"
+	} 
+	
+	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
 	if err != nil {
 		return fmt.Errorf("error fetching Pokedex locations: %w", err)
 	}
@@ -35,8 +40,10 @@ func commandMap(cfg *config) error {
 	}
 	
 	//display all locations 
-	for _, location := range locations.Results {
-		fmt.Printf("%s\n", location.Name)
+	if len(locations.Results) > 0  {
+		for _, location := range locations.Results {
+			fmt.Printf("%s\n", location.Name)
+		}
 	}
 
 	return nil
